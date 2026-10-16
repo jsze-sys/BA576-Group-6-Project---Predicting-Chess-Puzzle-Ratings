@@ -22,7 +22,7 @@ Jonathan Sze, Nawaf Alsheikh, Alexander Lee, Aaron Cheung
 
 ## Current project state
 
-The team has a 5,000 puzzle pilot CSV, a first phase problem and answers document, and a four page proposal deck. The starter workbook loads the pilot data, audits it, creates interpretable features, checks the grouped train and test split, and establishes a simple baseline. The notebook is intentionally a starting point, not a finished submission.
+The team has a first phase problem and answers document and a four page proposal deck. The starter workbook is configured to load the first 30,000 rows from the Lichess source, audit them, create interpretable features, check the grouped train and test split, and establish a simple baseline. The notebook is intentionally a starting point, not a finished submission.
 
 ## Important modeling decision
 
