@@ -1,33 +1,61 @@
-# BA576 Group 6: Predicting Chess Puzzle Ratings
+# Predicting Chess Puzzle Difficulty
 
-Team project for BA576 Machine Learning for Business Analytics.
-
-## Research question
-
-Can we predict a Lichess chess puzzle's numeric difficulty rating from the position, the known solution, and tactical features available when a puzzle is created?
-
-## Team
-
+**BA576 Machine Learning for Business Analytics · Group 6 · Fall 2026**
 Jonathan Sze, Nawaf Alsheikh, Alexander Lee, Aaron Cheung
 
-## Repository structure
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jsze-sys/BA576-Group-6-Project---Predicting-Chess-Puzzle-Ratings/blob/main/notebooks/BA576_Project_Workbook.ipynb)
 
-- `notebooks/BA576_Project_Workbook.ipynb`: Colab compatible starter workbook.
-- `data/README.md`: data access and sharing notes.
-- `requirements.txt`: Python dependencies used by the notebook.
+## Question
 
-## Open in Google Colab
+When a new chess puzzle is created, can we predict how difficult players will find it (its Lichess rating) using only information available before anyone has tried it?
 
-[Open the starter workbook in Colab](https://colab.research.google.com/github/jsze-sys/BA576-Group-6-Project---Predicting-Chess-Puzzle-Ratings/blob/main/notebooks/BA576_Project_Workbook.ipynb)
+## Why it matters
 
-## Current project state
+A new puzzle starts with a placeholder rating, so online chess platforms serve it to the wrong players until hundreds of attempts correct it: beginners get puzzles that are far too hard, strong players get puzzles that are too easy. Predicting the rating at creation time lets platforms such as Lichess and Chess.com, training apps and coaches match new puzzles to the right players from day one.
 
-The team has a first phase problem and answers document and a four page proposal deck. The starter workbook is configured to load the first 30,000 rows from the Lichess source, audit them, create interpretable features, check the grouped train and test split, and establish a simple baseline. The notebook is intentionally a starting point, not a finished submission.
+## Data
 
-## Important modeling decision
+A random sample of 30,000 puzzles from the [Lichess open puzzle database](https://database.lichess.org/#puzzles) (CC0 license, about 6.1 million puzzles in total). From each puzzle's position, solution and theme tags we build 19 predictors in four groups: board composition, position context, the known solution, and tactic themes. Information that exists only after players attempt a puzzle (number of plays, popularity, rating uncertainty) is excluded from the predictors. See [`data/README.md`](data/README.md) for column details.
 
-The proposal includes features derived from the recorded solution, such as solution length, captures, and checks. That is valid only if the intended use case is rating a puzzle after its solution is known. If the intended use case is rating a position before a solution is available, those features are leakage and must be removed. The team should settle this framing before comparing models.
+## Methods
 
-## Academic integrity
+Every method taught in BA576, scored on the same 6,000-puzzle test set and tuned with 5-fold cross-validation on the training set: linear regression, forward and backward stepwise selection, Ridge, Lasso and Elastic Net, polynomial and interaction terms, k-nearest neighbors, decision trees with cost-complexity pruning, bagging, random forest, AdaBoost and a neural network.
 
-The BA576 syllabus requires citation of external resources, including AI tools. The notebook contains a reminder to document any external assistance and to verify all code and interpretations as a team before submission.
+## Key results
+
+| Model | Test RMSE (rating points) | Test R² |
+|---|---|---|
+| Random forest | 373 | 0.55 |
+| Bagging | 375 | 0.54 |
+| Neural network | 376 | 0.54 |
+| Polynomial + interactions (Lasso) | 380 | 0.53 |
+| Decision tree (pruned) | 388 | 0.51 |
+| Linear regression | 413 | 0.44 |
+| Baseline: predict the average | 553 | 0.00 |
+
+- The **random forest** cuts the typical prediction error by a third compared with assigning every new puzzle the same rating.
+- **The solution drives difficulty.** Solution length and whether the first move is a check are the two most important predictors. A model that sees only the board, without the solution, barely beats the baseline (519).
+- The model is most accurate for mid-range puzzles and compresses very easy and very hard puzzles toward the middle. Part of the remaining error is noise in the Lichess ratings themselves.
+
+## Repository
+
+| Path | Contents |
+|---|---|
+| `notebooks/BA576_Project_Workbook.ipynb` | Full analysis: data, features, descriptive analysis, all models, comparison and conclusions |
+| `data/processed/Lichess_Puzzle_Random_30000.csv` | The 30,000-puzzle sample |
+| `data/README.md` | Data source and column descriptions |
+| `requirements.txt` | Python packages |
+
+## Running the notebook
+
+Click **Open in Colab** above and choose *Runtime → Run all*. The notebook installs its one extra package and loads the data from this repository automatically. A full run takes about 5 to 10 minutes.
+
+To run locally: `pip install -r requirements.txt`, then open the notebook in Jupyter.
+
+## References
+
+- Lichess.org open database, puzzle collection. https://database.lichess.org/#puzzles
+- James, Witten, Hastie, Tibshirani and Taylor. *An Introduction to Statistical Learning with Applications in Python*. https://www.statlearning.com
+- Pedregosa et al. (2011). Scikit-learn: Machine Learning in Python. *JMLR* 12, 2825–2830.
+- python-chess, by Niklas Fiekas. https://python-chess.readthedocs.io
+- Claude (Anthropic) was used to help write and document code. All analysis choices, results and interpretations were reviewed and verified by the team.

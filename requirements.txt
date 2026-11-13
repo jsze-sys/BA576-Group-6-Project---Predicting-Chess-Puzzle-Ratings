@@ -2,5 +2,5 @@ numpy
 pandas
 matplotlib
 seaborn
-scikit-learn
-python-chess
+scikit-learn>=1.2
+chess
