@@ -33,7 +33,7 @@ Every method taught in BA576, scored on the same 6,000-puzzle test set and tuned
 | Linear regression | 413 | 0.44 |
 | Baseline: predict the average | 553 | 0.00 |
 
-- The **random forest** cuts the typical prediction error by a third compared with assigning every new puzzle the same rating.
+- The **random forest** cuts the typical prediction error by a third compared with assigning every new puzzle the same rating. It cannot give an exact rating (the median puzzle is off by about 250 points), but it places a new puzzle in the right difficulty tier (easy, medium, hard, very hard) about half the time, and within one tier 96% of the time.
 - **The solution drives difficulty.** Solution length and whether the first move is a check are the two most important predictors. A model that sees only the board, without the solution, barely beats the baseline (519).
 - The model is most accurate for mid-range puzzles and compresses very easy and very hard puzzles toward the middle. Part of the remaining error is noise in the Lichess ratings themselves.
 
