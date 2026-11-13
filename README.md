@@ -44,6 +44,7 @@ Every method taught in BA576, scored on the same 6,000-puzzle test set and tuned
 | `notebooks/BA576_Project_Workbook.ipynb` | Full analysis: data, features, descriptive analysis, all models, comparison and conclusions |
 | `data/processed/Lichess_Puzzle_Random_30000.csv` | The 30,000-puzzle sample |
 | `data/README.md` | Data source and column descriptions |
+| `presentation/figures/` | Charts used in the final presentation |
 | `requirements.txt` | Python packages |
 
 ## Running the notebook
